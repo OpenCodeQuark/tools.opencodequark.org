@@ -871,7 +871,7 @@
         if (status) return { ok: false, payload: '', status };
         const formats = {
           axis: `CC.91${mobile}${last4}@axisbank`,
-          au: `aucc.${mobile}*${last4}@aubank`,
+          au: `aucc.${mobile}${last4}@aubank`,
           icici: `ccpay.${mobile}${last4}@icici`,
         };
         return { ok: true, payload: `upi://pay?pa=${normalizeUpiPa(formats[bank] || '')}`, status: '' };

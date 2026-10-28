@@ -186,6 +186,9 @@ assert_true(str_contains($home['body'], 'SSH Key Generator'), 'home lists SSH Ke
 assert_true(str_contains($home['body'], 'DNS Lookup'), 'home lists DNS Lookup');
 assert_true(!str_contains($home['body'], 'Encrypt - Decrypt') && !str_contains($home['body'], 'Encrypt / Decrypt'), 'home does not use old encryption names');
 assert_true(str_contains($home['body'], 'id="themeToggle"'), 'header has a theme toggle');
+assert_true(str_contains($home['body'], 'https://tools.opencodequark.org/'), 'canonical URLs use the current domain');
+assert_true(!str_contains($home['body'], 'tools.rajujha.dev'), 'homepage contains no legacy domain');
+assert_true(str_contains($home['body'], 'https://github.com/OpenCodeQuark/tools.opencodequark.org'), 'GitHub header link targets the current repository');
 assert_true(
     (bool) preg_match('/id="openSearch"[\s\S]*?id="themeToggle"[\s\S]*?GitHub repository/', $home['body']),
     'theme toggle sits between Search and GitHub'
@@ -367,6 +370,10 @@ assert_true(!array_key_exists('ip', $ip['json'] ?? []), 'ip is not duplicated at
 assert_true(!array_key_exists('note', $ipData), 'ip API does not include note');
 assert_true(!array_key_exists('ipv4_status', $ipData), 'ip API does not include ipv4_status');
 assert_true(!array_key_exists('ipv6_status', $ipData), 'ip API does not include ipv6_status');
+
+$markdownPage = http_request('GET', $base . '/markdown');
+assert_true($markdownPage['status'] === 200, 'GET /markdown');
+assert_true(str_contains($markdownPage['body'], 'aria-label="Rendered Markdown preview"'), 'Markdown preview has an accessible label and live region');
 
 $qrPage = http_request('GET', $base . '/qr');
 assert_true($qrPage['status'] === 200, 'GET /qr');

@@ -576,7 +576,7 @@ function render_error_page(int $status, string $title, string $message, ?Throwab
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#f3f6f0">
   <meta name="color-scheme" content="light dark">
-  <title>{$safeTitle} · tools.rajujha.dev</title>
+  <title>{$safeTitle} · tools.opencodequark.org</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script src="/assets/theme.js?v={$themeJsVersion}"></script>
   <link rel="stylesheet" href="/assets/app.css?v={$cssVersion}">
@@ -590,11 +590,11 @@ function render_error_page(int $status, string $title, string $message, ?Throwab
       <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">{$safeMessage}</p>
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-start">
         <a href="/" class="inline-flex min-h-11 items-center justify-center rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-inverse transition hover:bg-ink/90">Back to tools</a>
-        <a href="https://github.com/rjrajujha/tools.rajujha.dev/issues" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-card px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-leaf/40 hover:bg-soft" target="_blank" rel="noopener noreferrer">Report an issue</a>
+        <a href="https://github.com/OpenCodeQuark/tools.opencodequark.org/issues" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-card px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-leaf/40 hover:bg-soft" target="_blank" rel="noopener noreferrer">Report an issue</a>
       </div>
       {$detail}
     </main>
-    <footer class="border-t border-line pt-5 text-xs text-muted">tools.rajujha.dev · Private developer utilities</footer>
+    <footer class="border-t border-line pt-5 text-xs text-muted">tools.opencodequark.org · Private developer utilities</footer>
   </div>
 </body>
 </html>

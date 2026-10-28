@@ -871,7 +871,7 @@
         if (status) return { ok: false, payload: '', status };
         const formats = {
           axis: `CC.91${mobile}${last4}@axisbank`,
-          au: `aucc${mobile}${last4}@aubank`,
+          au: `aucc.${mobile}*${last4}@aubank`,
           icici: `ccpay.${mobile}${last4}@icici`,
         };
         return { ok: true, payload: `upi://pay?pa=${normalizeUpiPa(formats[bank] || '')}`, status: '' };
@@ -1354,49 +1354,105 @@
   function markdown(source) {
     const lines = source.replace(/\r/g, '').split('\n');
     let html = '';
-    let inCode = false;
-    let inList = false;
+    let fence = '';
+    let list = '';
+    let paragraph = [];
+    let quote = [];
 
-    for (const line of lines) {
-      if (line.startsWith('```')) {
-        html += inCode ? '</code></pre>' : '<pre><code>';
-        inCode = !inCode;
-        continue;
+    const flushParagraph = () => {
+      if (paragraph.length) {
+        html += '<p>' + inline(paragraph.join('\n').replace(/  \n/g, '<br>')) + '</p>';
+        paragraph = [];
       }
-      if (inCode) {
-        html += mdEscape(line) + '\n';
-        continue;
+    };
+    const flushQuote = () => {
+      if (quote.length) {
+        flushParagraph();
+        html += '<blockquote><p>' + inline(quote.join(' ')) + '</p></blockquote>';
+        quote = [];
       }
-      if (/^\s*-\s+/.test(line)) {
-        if (!inList) {
-          html += '<ul>';
-          inList = true;
+    };
+    const closeList = () => {
+      if (list) {
+        html += list === 'ol' ? '</ol>' : '</ul>';
+        list = '';
+      }
+    };
+    const unordered = (line) => /^\s*[-+*]\s+/.test(line);
+    const ordered = (line) => /^\s*\d+[.)]\s+/.test(line);
+
+    for (let i = 0; i < lines.length; i += 1) {
+      const line = lines[i];
+      const fenceMatch = line.match(/^\s*(\x60{3,}|~{3,})(.*)$/);
+      if (fence) {
+        if (fenceMatch && fenceMatch[1][0] === fence[0] && fenceMatch[1].length >= fence.length) {
+          html += '</code></pre>';
+          fence = '';
+        } else {
+          html += mdEscape(line) + '\n';
         }
-        html += '<li>' + inline(line.replace(/^\s*-\s+/, '')) + '</li>';
         continue;
       }
-      if (inList) {
-        html += '</ul>';
-        inList = false;
+      if (fenceMatch) {
+        flushParagraph(); flushQuote(); closeList();
+        fence = fenceMatch[1];
+        const language = fenceMatch[2].trim().split(/\s+/)[0].replace(/[^a-zA-Z0-9_-]/g, '');
+        html += '<pre><code' + (language ? ' class="language-' + mdEscape(language) + '"' : '') + '>';
+        continue;
       }
       if (!line.trim()) {
-        html += '<div class="h-1.5"></div>';
+        flushParagraph(); flushQuote(); closeList();
         continue;
       }
-      const heading = line.match(/^(#{1,6})\s+(.+)$/);
+      if (/^\s*(?:---+|___+|\*\*\*+)\s*$/.test(line)) {
+        flushParagraph(); flushQuote(); closeList();
+        html += '<hr>';
+        continue;
+      }
+      const heading = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
       if (heading) {
-        html += `<h${heading[1].length}>${inline(heading[2])}</h${heading[1].length}>`;
+        flushParagraph(); flushQuote(); closeList();
+        const level = heading[1].length;
+        html += '<h' + level + '>' + inline(heading[2]) + '</h' + level + '>';
         continue;
       }
       if (/^>\s?/.test(line)) {
-        html += '<blockquote>' + inline(line.replace(/^>\s?/, '')) + '</blockquote>';
+        flushParagraph(); closeList();
+        quote.push(line.replace(/^>\s?/, ''));
         continue;
       }
-      html += '<p>' + inline(line) + '</p>';
+      flushQuote();
+      if (unordered(line) || ordered(line)) {
+        flushParagraph();
+        const nextList = ordered(line) ? 'ol' : 'ul';
+        if (list !== nextList) {
+          closeList();
+          list = nextList;
+          html += nextList === 'ol' ? '<ol>' : '<ul>';
+        }
+        const item = line.replace(/^\s*(?:[-+*]|\d+[.)])\s+/, '');
+        html += '<li>' + inline(item) + '</li>';
+        continue;
+      }
+      closeList();
+      const trimmed = line.trim();
+      if (trimmed.startsWith('|') && i + 1 < lines.length && /^\s*\|?\s*:?-{3,}:?\s*(?:\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[i + 1])) {
+        flushParagraph();
+        const headers = trimmed.replace(/^\||\|$/g, '').split('|').map(cell => cell.trim());
+        i += 1;
+        html += '<table><thead><tr>' + headers.map(cell => '<th>' + inline(cell) + '</th>').join('') + '</tr></thead><tbody>';
+        while (i + 1 < lines.length && lines[i + 1].trim().startsWith('|')) {
+          i += 1;
+          const cells = lines[i].trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim());
+          html += '<tr>' + headers.map((_, index) => '<td>' + inline(cells[index] || '') + '</td>').join('') + '</tr>';
+        }
+        html += '</tbody></table>';
+        continue;
+      }
+      paragraph.push(line);
     }
-
-    if (inList) html += '</ul>';
-    if (inCode) html += '</code></pre>';
+    flushParagraph(); flushQuote(); closeList();
+    if (fence) html += '</code></pre>';
     return html;
   }
 
@@ -1422,7 +1478,7 @@
 
     const render = () => {
       const value = input.value;
-      const allowed = new Set(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'STRONG', 'EM', 'CODE', 'PRE', 'UL', 'LI', 'BLOCKQUOTE', 'A', 'DIV']);
+      const allowed = new Set(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'P', 'STRONG', 'EM', 'S', 'DEL', 'CODE', 'PRE', 'UL', 'OL', 'LI', 'BLOCKQUOTE', 'A', 'DIV', 'BR', 'HR', 'TABLE', 'THEAD', 'TBODY', 'TR', 'TH', 'TD']);
       const parsed = new DOMParser().parseFromString(`<div id="md-root">${markdown(value)}</div>`, 'text/html');
       const root = parsed.getElementById('md-root');
       const copyNode = (node) => {
@@ -1453,6 +1509,11 @@
         if (tag === 'DIV') {
           el.className = 'h-1.5';
         }
+        if (tag === 'TH' || tag === 'TD') {
+          el.className = tag === 'TH' ? 'border border-line bg-soft px-3 py-2 text-left font-semibold' : 'border border-line px-3 py-2';
+        }
+        if (tag === 'TABLE') el.className = 'my-4 w-full border-collapse text-sm';
+        if (tag === 'HR') el.className = 'my-4 border-0 border-t border-line';
         for (const child of node.childNodes) el.append(copyNode(child));
         return el;
       };

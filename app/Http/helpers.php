@@ -902,7 +902,7 @@ function app_ca_file(): ?string
 
 function app_http_get(string $url, array $headers = [], int $timeout = 8): array
 {
-    $ua = 'tools.rajujha.dev/' . app_config()['version'];
+    $ua = 'tools.opencodequark.org/' . app_config()['version'];
 
     if (function_exists('curl_init')) {
         $headerLines = [];

@@ -8,7 +8,7 @@
   <meta name="color-scheme" content="light dark">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="tools.rajujha.dev">
+  <meta property="og:site_name" content="tools.opencodequark.org">
   <meta property="og:title" content="<?= esc($title) ?>">
   <meta property="og:description" content="<?= esc($description) ?>">
   <meta property="og:url" content="<?= esc($canonical) ?>">

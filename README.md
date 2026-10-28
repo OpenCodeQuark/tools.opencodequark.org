@@ -1,4 +1,4 @@
-# tools.rajujha.dev
+# tools.opencodequark.org
 
 Fast, private developer utilities. No accounts, no analytics, no database, no tracking.
 
@@ -57,8 +57,8 @@ Strength of encryption depends on secret entropy and correct use. This is not a 
 ## Local development
 
 ```bash
-git clone https://github.com/rjrajujha/tools.rajujha.dev.git
-cd tools.rajujha.dev
+git clone https://github.com/rjrajujha/tools.opencodequark.org.git
+cd tools.opencodequark.org
 npm install
 npm run build
 php -S 127.0.0.1:8080 router.php

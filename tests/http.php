@@ -186,6 +186,8 @@ assert_true(str_contains($home['body'], 'SSH Key Generator'), 'home lists SSH Ke
 assert_true(str_contains($home['body'], 'DNS Lookup'), 'home lists DNS Lookup');
 assert_true(!str_contains($home['body'], 'Encrypt - Decrypt') && !str_contains($home['body'], 'Encrypt / Decrypt'), 'home does not use old encryption names');
 assert_true(str_contains($home['body'], 'id="themeToggle"'), 'header has a theme toggle');
+assert_true(str_contains($home['body'], 'https://tools.opencodequark.org/'), 'canonical URLs use the current domain');
+assert_true(str_contains($home['body'], 'https://github.com/OpenCodeQuark/tools.opencodequark.org'), 'GitHub header link targets the current repository');
 assert_true(
     (bool) preg_match('/id="openSearch"[\s\S]*?id="themeToggle"[\s\S]*?GitHub repository/', $home['body']),
     'theme toggle sits between Search and GitHub'
@@ -368,6 +370,10 @@ assert_true(!array_key_exists('note', $ipData), 'ip API does not include note');
 assert_true(!array_key_exists('ipv4_status', $ipData), 'ip API does not include ipv4_status');
 assert_true(!array_key_exists('ipv6_status', $ipData), 'ip API does not include ipv6_status');
 
+$markdownPage = http_request('GET', $base . '/markdown');
+assert_true($markdownPage['status'] === 200, 'GET /markdown');
+assert_true(str_contains($markdownPage['body'], 'aria-label="Rendered Markdown preview"'), 'Markdown preview has an accessible label and live region');
+
 $qrPage = http_request('GET', $base . '/qr');
 assert_true($qrPage['status'] === 200, 'GET /qr');
 assert_true(str_contains($qrPage['body'], 'id="qrType"'), 'QR type selector is present');
@@ -385,6 +391,11 @@ assert_true(str_contains($qrPage['body'], 'id="qrUpiAccountFields"') && str_cont
 assert_true(str_contains($qrPage['body'], 'id="qrCcBank"'), 'QR CC UPI fields are present');
 assert_true(str_contains($qrPage['body'], 'id="qrCcLast4Wrap"'), 'CC UPI last-4 field is present');
 assert_true(str_contains($qrPage['body'], 'id="qrCcIciciHint"'), 'ICICI helper text is present');
+assert_true(str_contains($appJs['body'], 'aucc.${mobile}${last4}@aubank'), 'AU Bank CC UPI uses the dotted mobile-plus-last4 handle');
+assert_true(str_contains($appJs['body'], "html += '<table><thead><tr>'"), 'Markdown preview supports tables');
+assert_true(str_contains($appJs['body'], "html += nextList === 'ol' ? '<ol>' : '<ul>'"), 'Markdown preview supports ordered lists');
+assert_true(str_contains($appJs['body'], "html += '<hr>'"), 'Markdown preview supports horizontal rules');
+assert_true(str_contains($markdownPage['body'], 'aria-label="Rendered Markdown preview"'), 'Markdown preview includes accessible preview semantics');
 assert_true(str_contains($qrPage['body'], 'id="qrDownloadPng"') && str_contains($qrPage['body'], 'id="qrDownloadSvg"'), 'QR download buttons are preserved');
 
 $ipPage = http_request('GET', $base . '/ip');

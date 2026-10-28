@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tools.opencodequark.org/sitemap.xml
+Sitemap: https://tools.rajujha.dev/sitemap.xml

@@ -18,8 +18,8 @@
         </div>
         <div class="flex min-h-64 flex-col overflow-hidden rounded-2xl border border-line bg-card lg:min-h-0">
           <div class="border-b border-line bg-card/70 px-4 py-3">
-            <label class="text-sm font-semibold text-ink" for="preview">Preview</label>
+            <label class="text-sm font-semibold text-ink">Preview</label>
           </div>
-          <article id="preview" class="markdown-preview min-h-0 flex-1 overflow-auto px-4 py-4 sm:px-5 sm:py-5" aria-live="polite" aria-label="Rendered Markdown preview"></article>
+          <article id="preview" class="markdown-preview min-h-0 flex-1 overflow-auto px-4 py-4 sm:px-5 sm:py-5"></article>
         </div>
       </div>

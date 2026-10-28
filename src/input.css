@@ -257,13 +257,6 @@
     @apply border-l-4 border-line pl-4 text-muted;
   }
 
-  .markdown-preview table { @apply my-4 w-full border-collapse text-sm; }
-  .markdown-preview th { @apply border border-line bg-soft px-3 py-2 text-left font-semibold; }
-  .markdown-preview td { @apply border border-line px-3 py-2; }
-  .markdown-preview hr { @apply my-4 border-0 border-t border-line; }
-  .markdown-preview del, .markdown-preview s { @apply text-muted line-through; }
-  .markdown-preview ol { @apply my-3 list-decimal pl-5; }
-
   .markdown-preview pre {
     @apply overflow-x-auto rounded-xl bg-ink p-3 text-sm text-inverse sm:p-4;
   }

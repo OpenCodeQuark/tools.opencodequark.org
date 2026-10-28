@@ -45,7 +45,7 @@ final class PageController
         $currentTool = Catalog::tool($page);
         $toolName = $currentTool[1] ?? ucwords(str_replace('-', ' ', (string) $page));
         $toolDesc = $currentTool[2] ?? 'Fast, private developer utilities';
-        $siteUrl = 'https://tools.opencodequark.org';
+        $siteUrl = 'https://tools.rajujha.dev';
         $canonical = $page === 'home' ? $siteUrl . '/' : $siteUrl . '/' . $page;
         $title = $page === 'home' ? 'Developer Tools' : $toolName . ' · Developer Tools';
         $description = $page === 'home'

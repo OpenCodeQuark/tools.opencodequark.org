@@ -1,5 +1,5 @@
 {
-  "name": "tools.rajujha.dev",
+  "name": "tools.opencodequark.org",
   "private": true,
   "scripts": {
     "build": "npm run build:css",

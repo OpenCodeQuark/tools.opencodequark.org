@@ -392,6 +392,11 @@ assert_true(str_contains($qrPage['body'], 'id="qrUpiAccountFields"') && str_cont
 assert_true(str_contains($qrPage['body'], 'id="qrCcBank"'), 'QR CC UPI fields are present');
 assert_true(str_contains($qrPage['body'], 'id="qrCcLast4Wrap"'), 'CC UPI last-4 field is present');
 assert_true(str_contains($qrPage['body'], 'id="qrCcIciciHint"'), 'ICICI helper text is present');
+assert_true(str_contains($appJs['body'], 'aucc.${mobile}*${last4}@aubank'), 'AU Bank CC UPI uses the dotted mobile-star-last4 handle');
+assert_true(str_contains($appJs['body'], "html += '<table><thead><tr>'"), 'Markdown preview supports tables');
+assert_true(str_contains($appJs['body'], "html += nextList === 'ol' ? '<ol>' : '<ul>'"), 'Markdown preview supports ordered lists');
+assert_true(str_contains($appJs['body'], "html += '<hr>'"), 'Markdown preview supports horizontal rules');
+assert_true(str_contains($appJs['body'], 'Rendered Markdown preview'), 'Markdown preview includes accessible preview semantics');
 assert_true(str_contains($qrPage['body'], 'id="qrDownloadPng"') && str_contains($qrPage['body'], 'id="qrDownloadSvg"'), 'QR download buttons are preserved');
 
 $ipPage = http_request('GET', $base . '/ip');

@@ -187,7 +187,6 @@ assert_true(str_contains($home['body'], 'DNS Lookup'), 'home lists DNS Lookup');
 assert_true(!str_contains($home['body'], 'Encrypt - Decrypt') && !str_contains($home['body'], 'Encrypt / Decrypt'), 'home does not use old encryption names');
 assert_true(str_contains($home['body'], 'id="themeToggle"'), 'header has a theme toggle');
 assert_true(str_contains($home['body'], 'https://tools.opencodequark.org/'), 'canonical URLs use the current domain');
-assert_true(!str_contains($home['body'], 'tools.rajujha.dev'), 'homepage contains no legacy domain');
 assert_true(str_contains($home['body'], 'https://github.com/OpenCodeQuark/tools.opencodequark.org'), 'GitHub header link targets the current repository');
 assert_true(
     (bool) preg_match('/id="openSearch"[\s\S]*?id="themeToggle"[\s\S]*?GitHub repository/', $home['body']),

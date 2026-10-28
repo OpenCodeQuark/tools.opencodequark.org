@@ -590,7 +590,7 @@ function render_error_page(int $status, string $title, string $message, ?Throwab
       <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted sm:text-base">{$safeMessage}</p>
       <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-start">
         <a href="/" class="inline-flex min-h-11 items-center justify-center rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-inverse transition hover:bg-ink/90">Back to tools</a>
-        <a href="https://github.com/OpenCodeQuark/tools.opencodequark.org/issues" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-card px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-leaf/40 hover:bg-soft" target="_blank" rel="noopener noreferrer">Report an issue</a>
+        <a href="https://github.com/rjrajujha/tools.opencodequark.org/issues" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-line bg-card px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-leaf/40 hover:bg-soft" target="_blank" rel="noopener noreferrer">Report an issue</a>
       </div>
       {$detail}
     </main>

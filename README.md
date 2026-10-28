@@ -57,7 +57,7 @@ Strength of encryption depends on secret entropy and correct use. This is not a 
 ## Local development
 
 ```bash
-git clone https://github.com/OpenCodeQuark/tools.opencodequark.org.git
+git clone https://github.com/rjrajujha/tools.opencodequark.org.git
 cd tools.opencodequark.org
 npm install
 npm run build
